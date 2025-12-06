@@ -1,8 +1,11 @@
 import telebot # библиотека telebot
 from config import token # импорт токена
+import re
 
 
 bot = telebot.TeleBot(token) 
+
+URL_REGEX = r"(https?://|www\.)"
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -34,8 +37,14 @@ def echo_message(message):
     bot.reply_to(message, message.text)
 
 @bot.message_handler(func=lambda message: True)
-def echo_message(message):
-    bot.reply_to(message, message.text)
+def ban_if_link(message):
+    if message.chat.type in ["group", "supergroup"]:
+        if message.text and re.search(URL_REGEX, message.text):
+            try:
+                bot.ban_chat_member(message.chat.id, message.from_user.id)
+                bot.reply_to(message, f"🚫 {message.from_user.first_name} banned for sending a link.")
+            except Exception as e:
+                print("Error:", e)
 
 
 bot.infinity_polling(none_stop=True)
