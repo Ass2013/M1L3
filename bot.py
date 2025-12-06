@@ -1,6 +1,7 @@
 import telebot # библиотека telebot
 from config import token # импорт токена
 
+
 bot = telebot.TeleBot(token) 
 
 @bot.message_handler(commands=['start'])
@@ -32,6 +33,9 @@ def make_some(message):
 def echo_message(message):
     bot.reply_to(message, message.text)
 
+@bot.message_handler(func=lambda message: True)
+def echo_message(message):
+    bot.reply_to(message, message.text)
 
 
 bot.infinity_polling(none_stop=True)
