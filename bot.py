@@ -42,7 +42,7 @@ def ban_if_link(message):
         if message.text and re.search(URL_REGEX, message.text):
             try:
                 bot.ban_chat_member(message.chat.id, message.from_user.id)
-                bot.reply_to(message, f"🚫 {message.from_user.first_name} banned for sending a link.")
+                bot.reply_to(message, f" {message.from_user.first_name} banned for sending a link.")
             except Exception as e:
                 print("Error:", e)
 
